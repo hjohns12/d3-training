@@ -1,0 +1,68 @@
+<!--
+- Create an HTML file containing a blue rectangle that is 100 pixels in width and 20 pixels in height.
+- Underneath the blue rectangle, create 3 orange circles next to each other, each with a 2px thick blue border. Each circle should have double the radius of the previous one.
+- Underneath the circles, create an octagon. -->
+
+
+<html>
+
+
+<head>
+      <title>VIZ 1</title>
+  </head>
+
+  <body>
+      <div id="viz"></div>
+
+      <script src="https://d3js.org/d3.v4.min.js"></script>
+      <script>
+
+          var height = 900;
+          var width = 900;
+
+          var svg = d3.select("#viz")
+              .append('svg')
+              .attr('height', height)
+              .attr('width', width);
+
+          svg.append('rect')
+              .attr('x', 20)
+              .attr('y', 5)
+              .attr('height', 20)
+              .attr('width', 100)
+              .attr('fill', 'blue');
+
+           svg.append('circle')
+               .attr('cx', 20)
+               .attr('cy', 90)
+               .attr('r', 10)
+               .attr('fill', 'orange')
+               .attr('stroke', 'blue')
+               .attr('stroke-width', '2');
+
+           svg.append('circle')
+               .attr('cx', 80)
+               .attr('cy', 90)
+               .attr('r', 10)
+               .attr('fill', 'orange')
+               .attr('stroke', 'blue')
+               .attr('stroke-width', '2');
+
+           svg.append('circle')
+               .attr('cx', 140)
+               .attr('cy', 90)
+               .attr('r', 10)
+               .attr('fill', 'orange')
+               .attr('stroke', 'blue')
+               .attr('stroke-width', '2');
+
+           svg.append('polygon')
+               .attr('points', "120 200, 130 200, 140 210, 140 220, 130 230, 120 220, 100 230, 100 220")
+               .attr('fill', 'pink');
+
+
+
+      </script>
+  </body>
+
+</html>
