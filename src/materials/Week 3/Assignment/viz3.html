@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <title> Viz 3 </title>
+  </head>
+  <body>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <script>
+    var w = 2000;
+    var h = 2000;
+
+    var svg = d3.select('body')
+                .append('svg')
+                .attr('width', w)
+                .attr('height', h);
+
+    d3.json('data.json', function(myData) {
+
+      function updateViz(myData){
+        var selection = svg.selectAll('circle')
+                            .data(myData)
+        selection
+            .enter()
+            .append('circle')
+            .attr('cx', d => Math.floor(Math.random() * 100))
+            .attr('cy', d => Math.floor(Math.random() * 100))
+            .attr('r', d => d.size)
+            .attr('fill', 'none')
+            .attr('stroke', d => d.color);
+
+        selection
+            .exit()
+            .remove();
+
+        selection
+          .append('circle')
+          .attr('cx', Math.floor(Math.random() * 100))
+          .attr('cy', Math.floor(Math.random() * 100))
+          .attr('r', d => d.size)
+          .attr('fill', 'none')
+          .attr('stroke', d => d.color);
+        }
+
+            function animate(data) {
+                updateViz(data);
+                var loop = setInterval(function() {
+                    if (data.length === 0) { clearInterval(loop); }
+                    data.pop();
+                    updateViz(data);
+                }, 2000);
+            }
+
+            animate(myData);
+});
+
+
+      </script>
+    </body>
+
+
+
+</html>

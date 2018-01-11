@@ -1,0 +1,57 @@
+<!--
+### Part 2
+1. In a new HTML file, read in data.json file using D3.
+This file contains an array of 10 objects that have the following properties: size and color.
+2. In the top half the screen, create 10 rectangles (one for each object in the data)
+with widths and fill colors equal to the `size` and `color` properties on the corresponding data object.
+3. In the bottom half of the screen, create 10 circles (one for each object in the data)
+with fill colors equal to the `color` property on the corresponding data object.
+Now picture the screen as an Cartesian plane with (0, 0) at the upper-left corner of the screen.
+Position each circle such that the coordinates of its center are (`size`, -2*`size`).
+-->
+<html>
+  <head>
+    <title> Viz 2 </title>
+  </head>
+  <body>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script>
+    var w = 2000;
+    var h = 2000;
+
+    var svg = d3.select('body')
+                .append('svg')
+                .attr('width', w)
+                .attr('height', h);
+
+    var myData;
+     d3.json("data.json", function(error, data) {
+       myData = data;
+       console.log(myData);
+
+      svg.selectAll('rectangles')
+          .data(myData)
+          .enter()
+          .append("rect")
+          .attr('x', (d, i) => i*30)
+          .attr('y', 15)
+          .attr('width', d => d.size)
+          .attr('height', 20)
+          .attr('fill', d => d.color)
+
+      svg.selectAll('circles')
+          .data(myData)
+          .enter()
+          .append('circle')
+          .attr('cx', d => d.size)
+          .attr('cy', d => d.size*2)
+          .attr('r', 10)
+          .attr('fill', d => d.color)
+      });
+
+      </script>
+    </body>
+
+
+
+</html>
