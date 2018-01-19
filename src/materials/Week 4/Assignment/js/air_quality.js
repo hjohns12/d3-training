@@ -26,6 +26,8 @@ function buildChart(containerId) {
         .append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
+    var colors = (["#3366cc", "#dc3912", "#ff9900", "#109618", "#990099"])
+
     // read in our data
     d3.csv('air_quality.csv', function(error, data) {
         // handle read errors
@@ -57,6 +59,17 @@ function buildChart(containerId) {
             .padding(0.2);
 
         console.log(x.domain(), x.range());
+
+        var cols = d3
+              .scaleOrdinal()
+              .domain(
+                data.map(function(d){
+                  return d.Region;
+                })
+              )
+              .range(["pink", "#3cb44b", "#ffe119", "blue"]);
+
+          console.log(cols.domain()[1]);
 
         var y = d3
             .scaleLinear()
@@ -104,7 +117,9 @@ function buildChart(containerId) {
                 return innerHeight - y(d.Emissions);
                 //return y(d.Emissions);
             })
-            .attr('fill', 'steelblue')
+            .attr('fill', function(d){
+              return cols(d.Region);
+            })
             .attr('stroke', 'none');
 
         // axis labels
@@ -141,3 +156,10 @@ function buildChart(containerId) {
 }
 
 buildChart('#chart-holder');
+
+
+
+
+// to make a key:
+// solutions on main repo once the class is done
+// create legend as a gropuing
