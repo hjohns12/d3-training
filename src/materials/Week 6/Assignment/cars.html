@@ -1,0 +1,65 @@
+<html>
+
+
+<head>
+      <title> ASSIGNMENT 6 PART 1 </title>
+  </head>
+
+  <body>
+      <div id="viz"></div>
+
+      <script src="https://d3js.org/d3.v4.min.js"></script>
+      <script>
+
+      d3.json('cars.json', function(error, data) {
+          // handle read errors
+          if (error) {
+              console.error('failed to read data');
+              return;
+          }
+
+          console.log('raw', data);
+
+          // part A
+
+          var commonOne = data.filter(
+            (d) => d.make_is_common == "1");
+
+          console.log("common == 1", commonOne);
+          console.log("Number of makes considered common is " + commonOne.length);
+
+          // part B
+
+          var countByCountry = d3.nest()
+                      .key(function(d) {
+                        return d.make_country;
+                      })
+                      .rollup(function(c) {
+                        return c.length;
+                      })
+                      .entries(data);
+
+                      console.log(countByCountry);
+
+                    //  console.log("Number of makes in" + countByCountry);
+
+          // part C
+
+          var countByCountyCommon = d3.nest()
+                              .key(function(d){
+                                return d.make_is_common;
+                              })
+                              .key(function(d){
+                                return d.make_country;
+                              })
+                              .rollup(function (c){
+                                return c.length;
+                              })
+                              .object(data);
+                          console.log(countByCountyCommon);
+        });
+
+      </script>
+  </body>
+
+</html>
