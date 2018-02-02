@@ -1,0 +1,51 @@
+<html>
+
+
+<head>
+      <title> ASSIGNMENT 6 PART 1 </title>
+  </head>
+
+  <body>
+      <div id="viz"></div>
+
+      <script src="https://d3js.org/d3.v4.min.js"></script>
+      <script>
+
+      d3.json('pokemon.json', function(error, data) {
+          // handle read errors
+          if (error) {
+              console.error('failed to read data');
+              return;
+          }
+          console.log('raw', data);
+
+
+          // task 1
+          //calculate the average weight (lbs) and height (in inches) of the pokemon. Note you will have to convert the units to lbs and inches.
+          var newheight = [];
+          var newweight = [];
+
+          data.forEach(function(d){
+            newheight.push(+d.height.replace(' m', ''));
+            newweight.push(+d.weight.replace(' kg', ''));
+          });
+
+          console.log(newheight);
+          console.log(newweight);
+
+          console.log("Converted average height", d3.mean(newheight)*39.37);
+          console.log("Converted average weight", d3.mean(newweight)*2.20462);
+
+
+
+        });
+
+
+
+
+
+
+      </script>
+  </body>
+
+</html>
