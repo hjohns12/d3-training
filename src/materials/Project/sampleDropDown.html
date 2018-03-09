@@ -1,0 +1,108 @@
+<script>
+function updateGraph(data) {
+
+
+    // Scale the range of the data
+    x.domain(d3.extent(data, function(d) { return d.year; }));
+    y.domain([d3.min(data, function(d) { return d.value; }), d3.max(data, function(d) { return d.value; })]);
+
+
+    // Nest the entries by state
+    dataNest = d3.nest()
+        .key(function(d) {return d.state;})
+        .entries(data);
+
+
+ 		var result = dataNest.filter(function(val,idx, arr){
+				  return $("." + val.key).attr("fill") != "#ccc"
+				  // matching the data with selector status
+				})
+
+
+ 		var state = svg.selectAll(".line")
+      .data(result, function(d){return d.key});
+
+		state.enter().append("path")
+			.attr("class", "line");
+
+		state.transition()
+			.style("stroke", function(d,i) { return d.color = color(d.key); })
+			.attr("id", function(d){ return 'tag'+d.key.replace(/\s+/g, '');}) // assign ID
+			.attr("d", function(d){
+
+				return stateline(d.values)
+			});
+
+		state.exit().remove();
+
+		var legend = d3.select("#legend")
+			.selectAll("text")
+			.data(dataNest, function(d){return d.key});
+
+		//checkboxes
+		legend.enter().append("rect")
+		  .attr("width", 10)
+		  .attr("height", 10)
+		  .attr("x", 0)
+		  .attr("y", function (d, i) { return 0 +i*15; })  // spacing
+		  .attr("fill",function(d) {
+		    return color(d.key);
+
+		  })
+		  .attr("class", function(d,i){return "legendcheckbox " + d.key})
+			.on("click", function(d){
+			  d.active = !d.active;
+
+			  d3.select(this).attr("fill", function(d){
+			    if(d3.select(this).attr("fill")  == "#ccc"){
+			      return color(d.key);
+			    }else {
+			      return "#ccc";
+			    }
+			  })
+
+
+			 var result = dataNest.filter(function(val,idx, arr){
+         return $("." + val.key).attr("fill") != "#ccc"
+       // matching the data with selector status
+      })
+
+       // Hide or show the lines based on the ID
+       svg.selectAll(".line").data(result, function(d){return d.key})
+         .enter()
+         .append("path")
+         .attr("class", "line")
+         .style("stroke", function(d,i) { return d.color = color(d.key); })
+        .attr("d", function(d){
+                return stateline(d.values);
+         });
+
+      svg.selectAll(".line").data(result, function(d){return d.key}).exit().remove()
+
+			})
+
+    // Add the Legend text
+    legend.enter().append("text")
+      .attr("x", 15)
+      .attr("y", function(d,i){return 10 +i*15;})
+      .attr("class", "legend");
+
+		legend.transition()
+      .style("fill", "#777" )
+      .text(function(d){return d.key;});
+
+		legend.exit().remove();
+
+		svg.selectAll(".axis").remove();
+
+    // Add the X Axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    // Add the Y Axis
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+};
